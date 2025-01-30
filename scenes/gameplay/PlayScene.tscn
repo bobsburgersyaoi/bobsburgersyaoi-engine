@@ -50,7 +50,7 @@ voiceTrack = NodePath("../../VoicesPlayer")
 metadata/_edit_use_anchors_ = true
 
 [node name="OpponentHealthBar" type="ProgressBar" parent="HUD"]
-offset_left = 60.0
+offset_left = 100.0
 offset_top = 16.0
 offset_right = 460.0
 offset_bottom = 36.0
@@ -77,9 +77,9 @@ expand_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -460.0
+offset_left = -440.0
 offset_top = 16.0
-offset_right = -60.0
+offset_right = -80.0
 offset_bottom = 36.0
 grow_horizontal = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_par68")

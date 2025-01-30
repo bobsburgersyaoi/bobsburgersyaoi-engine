@@ -2,7 +2,7 @@ class_name PlayScene
 extends MusicBeatScene
 
 var keys = ["left","down","up","right"]
-static var song = "senpai"
+static var song = "tutorial"
 var notes = []
 var spawnPoint:float
 var earliestNoteCanBeHitAt = 60
