@@ -1,0 +1,5 @@
+{
+	"name": "Tutorial",
+	"bpm": 100,
+	"difficulties": ["easy","normal","hard"]
+}

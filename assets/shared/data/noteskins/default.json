@@ -1,0 +1,23 @@
+{
+	"strumline": {
+		"0": ["arrowLEFT","left press", "left confirm"],
+		"1": ["arrowDOWN","down press", "down confirm"],
+		"2": ["arrowUP","up press", "up confirm"],
+		"3": ["arrowRIGHT","right press", "right confirm"]
+	},
+	"notes": {
+		"0": ["purple","purple hold piece", "pruple end hold"],
+		"1": ["blue","blue hold piece", "blue hold end"],
+		"2": ["green","green hold piece", "green hold end"],
+		"3": ["red","red hold piece", "red hold end"]
+	},
+	"offsets": {
+		"unpressed": [0,0],
+		"pressed": [0,0],
+		"confirm": [0,0]
+	},
+	"source": "notes",
+	"scale": [0.7,0.7],
+	"antialiasing": true,
+	"speedModifier": 1
+}

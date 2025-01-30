@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgmqmf2q67bxn"]
+
+[ext_resource type="Script" path="res://scenes/gameplay/Pause.gd" id="1_rdw5m"]
+
+[node name="Pause" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_rdw5m")
+
+[node name="Menu" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="PauseTxt" type="Label" parent="Menu"]
+visible = false
+offset_top = 17.0
+offset_right = 93.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 16
+text = "Paused!"

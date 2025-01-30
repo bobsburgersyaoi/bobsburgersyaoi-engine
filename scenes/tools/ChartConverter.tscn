@@ -1,0 +1,89 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhumnnx2kw6x4"]
+
+[ext_resource type="Script" path="res://scenes/tools/ChartConverter.gd" id="1_rbihv"]
+
+[node name="ChartConverter" type="Node2D"]
+script = ExtResource("1_rbihv")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="OgChart" type="TextEdit" parent="UI"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 40.0
+offset_top = -300.0
+offset_right = 640.0
+offset_bottom = 340.0
+grow_vertical = 2
+placeholder_text = "Original chart data"
+editable = false
+wrap_mode = 1
+scroll_smooth = true
+
+[node name="ConvertedChart" type="TextEdit" parent="UI"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -300.0
+offset_right = -40.0
+offset_bottom = 340.0
+grow_horizontal = 0
+grow_vertical = 2
+placeholder_text = "Converted chart data"
+editable = false
+
+[node name="LoadBTN" type="Button" parent="UI"]
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 360.0
+offset_bottom = 60.0
+text = "Select a chart to convert"
+
+[node name="SaveBTN" type="Button" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -360.0
+offset_top = 20.0
+offset_right = -40.0
+offset_bottom = 60.0
+grow_horizontal = 0
+text = "Save converted chart"
+
+[node name="ConvertBTN" type="Button" parent="UI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_top = 20.0
+offset_right = 80.0
+offset_bottom = 60.0
+grow_horizontal = 2
+text = "Convert"
+
+[node name="LoadChart" type="FileDialog" parent="UI"]
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 640)
+ok_button_text = "Open"
+dialog_hide_on_ok = true
+file_mode = 0
+filters = PackedStringArray("*.json")
+
+[node name="SaveChart" type="FileDialog" parent="UI"]
+auto_translate_mode = 1
+initial_position = 1
+size = Vector2i(640, 640)
+ok_button_text = "Save"
+dialog_hide_on_ok = true
+filters = PackedStringArray("*.json")
+
+[connection signal="pressed" from="UI/LoadBTN" to="." method="_on_load_btn_pressed"]
+[connection signal="pressed" from="UI/SaveBTN" to="." method="_on_save_btn_pressed"]
+[connection signal="pressed" from="UI/ConvertBTN" to="." method="_on_convert_btn_pressed"]
+[connection signal="file_selected" from="UI/LoadChart" to="." method="_on_load_chart_file_selected"]
+[connection signal="file_selected" from="UI/SaveChart" to="." method="_on_save_chart_file_selected"]

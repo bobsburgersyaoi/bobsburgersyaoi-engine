@@ -1,0 +1,45 @@
+[gd_scene load_steps=3 format=3 uid="uid://ds6vydxhsks42"]
+
+[ext_resource type="Script" path="res://scenes/gameplay/PlayScene.gd" id="1_4fjf7"]
+[ext_resource type="Script" path="res://scenes/gameplay/StrumLine.gd" id="1_10u56"]
+
+[node name="PlayScene" type="Node2D"]
+script = ExtResource("1_4fjf7")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="StrumLineOpponent" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 64.0
+offset_bottom = 64.0
+script = ExtResource("1_10u56")
+metadata/_edit_use_anchors_ = true
+
+[node name="StrumLinePlayer" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -512.0
+offset_top = 24.0
+offset_right = -472.0
+offset_bottom = 64.0
+grow_horizontal = 0
+script = ExtResource("1_10u56")
+cpu = false
+metadata/_edit_use_anchors_ = true
+
+[node name="DebugInfo" type="Label" parent="HUD"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Inst" type="AudioStreamPlayer" parent="."]
+
+[node name="VoicesOpponent" type="AudioStreamPlayer" parent="."]
+
+[node name="VoicesPlayer" type="AudioStreamPlayer" parent="."]

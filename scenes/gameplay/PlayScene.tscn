@@ -1,0 +1,145 @@
+[gd_scene load_steps=8 format=3 uid="uid://ds6vydxhsks42"]
+
+[ext_resource type="Script" path="res://scenes/gameplay/PlayScene.gd" id="1_4fjf7"]
+[ext_resource type="Script" path="res://scenes/gameplay/StrumLine.gd" id="1_10u56"]
+[ext_resource type="PackedScene" uid="uid://bgmqmf2q67bxn" path="res://scenes/gameplay/Pause.tscn" id="3_58h6w"]
+[ext_resource type="Texture2D" uid="uid://30yqhd3qvoyc" path="res://assets/shared/images/healthBar.png" id="3_o0hmy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_par68"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgl5d"]
+bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4vlch"]
+blend_mode = 3
+
+[node name="PlayScene" type="Node2D"]
+process_mode = 1
+physics_interpolation_mode = 1
+script = ExtResource("1_4fjf7")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="StrumLineOpponent" type="Control" parent="HUD" node_paths=PackedStringArray("voiceTrack")]
+show_behind_parent = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 32.0
+offset_right = 64.0
+offset_bottom = 72.0
+script = ExtResource("1_10u56")
+voiceTrack = NodePath("../../VoicesOpponent")
+metadata/_edit_use_anchors_ = true
+
+[node name="StrumLinePlayer" type="Control" parent="HUD" node_paths=PackedStringArray("voiceTrack")]
+show_behind_parent = true
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -512.0
+offset_top = 32.0
+offset_right = -472.0
+offset_bottom = 72.0
+grow_horizontal = 0
+script = ExtResource("1_10u56")
+cpu = false
+voiceTrack = NodePath("../../VoicesPlayer")
+metadata/_edit_use_anchors_ = true
+
+[node name="OpponentHealthBar" type="ProgressBar" parent="HUD"]
+offset_left = 60.0
+offset_top = 16.0
+offset_right = 460.0
+offset_bottom = 36.0
+theme_override_styles/background = SubResource("StyleBoxFlat_par68")
+theme_override_styles/fill = SubResource("StyleBoxFlat_sgl5d")
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="Overlay" type="TextureRect" parent="HUD/OpponentHealthBar"]
+material = SubResource("CanvasItemMaterial_4vlch")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_o0hmy")
+expand_mode = 1
+
+[node name="PlayerHealthBar" type="ProgressBar" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -460.0
+offset_top = 16.0
+offset_right = -60.0
+offset_bottom = 36.0
+grow_horizontal = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_par68")
+theme_override_styles/fill = SubResource("StyleBoxFlat_sgl5d")
+max_value = 1.0
+value = 0.5
+fill_mode = 1
+show_percentage = false
+
+[node name="Overlay" type="TextureRect" parent="HUD/PlayerHealthBar"]
+material = SubResource("CanvasItemMaterial_4vlch")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_o0hmy")
+expand_mode = 1
+
+[node name="DebugInfo" type="Label" parent="HUD"]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 16
+
+[node name="Countdown" type="Label" parent="HUD"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 3.0
+grow_vertical = 0
+text = "3"
+
+[node name="Countdown2" type="Label" parent="HUD"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = -17.0
+grow_vertical = 0
+text = "seconds"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Inst" type="AudioStreamPlayer" parent="."]
+
+[node name="VoicesOpponent" type="AudioStreamPlayer" parent="."]
+
+[node name="VoicesPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="CountdownTimer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true
+
+[node name="Pause" parent="." instance=ExtResource("3_58h6w")]
+
+[connection signal="timeout" from="CountdownTimer" to="." method="_on_countdown_timer_timeout"]
