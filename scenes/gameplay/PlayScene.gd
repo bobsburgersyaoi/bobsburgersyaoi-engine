@@ -2,38 +2,53 @@ class_name PlayScene
 extends MusicBeatScene
 
 var keys = ["left","down","up","right"]
-static var song = "tutorial"
-var notes = []
+static var song = "ugh"
+var notes:Array[Note] = []
+var notesToSpawn:Array[Note] = []
 var spawnPoint:float
-var earliestNoteCanBeHitAt = 60
+var earliestNoteCanBeHitAt = 70
 var time:float = 0.0
 
 # funny chart stuff
-static var sName = ""
+var sName = ""
 static var difficulty = "hard"
+static var variation = ""
+var variationString = ""
+static var playlist:Array[String] = []
 static var speed = 1.0
+var metaData:Dictionary
 
+# gameplay stuff ?
 var generatedMusic = false
 var inCutscene = false
 var blueballed = false
 var cdProgress = 0
 var health = 0.5
 
+# TIME VARIABLES... ough
+var t:int = 0
+var minutes:int = 0
+var seconds:int = 0
+
 func _ready():
+	#FunnyUtils.setGameSize(1024,960)
+	#updateTcSize()
 	Conductor.songPosition = -1000000
 	connect("b", onBeatHit)
 	connect("s", onStepHit)
 	initializeSong()
 
 func initializeSong():
-	var chartData = JSON.parse_string(FileAccess.get_file_as_string("res://assets/songs/"+song+"/data/charts.json"))
-	var metaData = JSON.parse_string(FileAccess.get_file_as_string("res://assets/songs/"+song+"/data/meta.json"))
+	if variation != "":
+		variationString = "-"+variation
+	var chartData = JSON.parse_string(FileAccess.get_file_as_string("res://assets/songs/"+song+"/data/charts"+variationString+".json"))
+	metaData = JSON.parse_string(FileAccess.get_file_as_string("res://assets/songs/"+song+"/data/meta"+variationString+".json"))
 	Conductor.changeBPM(metaData["bpm"])
 	sName = metaData["name"]
 	speed = chartData["scrollSpeed"][difficulty]
-	$Inst.stream = load("res://assets/songs/"+song+"/audio/Inst.ogg")
-	$VoicesOpponent.stream = load("res://assets/songs/"+song+"/audio/VoicesO.ogg")
-	$VoicesPlayer.stream = load("res://assets/songs/"+song+"/audio/VoicesP.ogg")
+	$Inst.stream = load("res://assets/songs/"+song+"/audio/Inst"+variationString+".ogg")
+	$VoicesOpponent.stream = load("res://assets/songs/"+song+"/audio/VoicesO"+variationString+".ogg")
+	$VoicesPlayer.stream = load("res://assets/songs/"+song+"/audio/VoicesP"+variationString+".ogg")
 	for i in chartData["notes"][difficulty]:
 		var oldNote:Note
 		if notes.size() > 0:
@@ -93,7 +108,6 @@ func _physics_process(delta: float):
 	$HUD/Countdown2.text = str($CountdownTimer.time_left)
 	if generatedMusic:
 		Conductor.songPosition += (Conductor.offset + delta * 1000)*$Inst.pitch_scale
-	$HUD/DebugInfo.text = str(Conductor.songPosition)
 	
 	keyShit()
 	
@@ -102,13 +116,13 @@ func _physics_process(delta: float):
 			if is_instance_valid(daNote) && generatedMusic:
 				daNote.position.y = (0.45 * (Conductor.songPosition - daNote.time) * daNote.get_parent().get_parent().speedModifier) * -speed
 				if daNote.get_parent().get_parent().cpu && daNote.length == 0.0:
-					if daNote.position.y < daNote.get_parent().global_position.y+10:
+					if daNote.position.y < (daNote.get_parent().global_position.y+10)*daNote.get_parent().get_parent().speedModifier:
 						daNote.frame = 0
 						var dnP:StrumNote = daNote.get_parent()
 						dnP.play(dnP.confirm)
 						cpuNoteHit(daNote)
 				if daNote.get_parent().get_parent().cpu && daNote.length > 0.0:
-					if daNote.position.y < daNote.get_parent().global_position.y:
+					if daNote.position.y < (daNote.get_parent().global_position.y)*daNote.get_parent().get_parent().speedModifier:
 						daNote.frame = 0
 						var dnP:StrumNote = daNote.get_parent()
 						dnP.play(dnP.confirm)
@@ -174,8 +188,9 @@ func goodNoteHit(note:Note):
 	notes.erase(note)
 	note.queue_free()
 	health += 0.05
-	$HUD/OpponentHealthBar.value = 1-health
-	$HUD/PlayerHealthBar.value = health
+	if health > 1:
+		health = 1
+	$HUD/HealthBar.value = health
 
 func cpuNoteHit(note:Note):
 	note.onNoteHit()
@@ -190,8 +205,7 @@ func noteMiss(note:Note):
 	notes.erase(note)
 	note.queue_free()
 	health -= 0.05
-	$HUD/OpponentHealthBar.value = 1-health
-	$HUD/PlayerHealthBar.value = health
+	$HUD/HealthBar.value = health
 
 func get_spawnpoint():
 #	doing 720*2 for the sake of those REALLY long notes
@@ -202,6 +216,11 @@ func onBeatHit(beat:int = curBeat):
 
 func onStepHit(step:int = curStep):
 	pass
+
+func updateTcSize():
+	$HUD/TouchControls.scale.x = get_window().content_scale_size.x/1280.0
+	$HUD/TouchControls.scale.y = get_window().content_scale_size.y/720.0
+	print($HUD/TouchControls.scale)
 
 # funny script stuff
 func onPlayerNoteHit(direction:int, parent:StrumNote):

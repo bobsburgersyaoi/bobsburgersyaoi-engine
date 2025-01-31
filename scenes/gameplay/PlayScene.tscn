@@ -1,18 +1,77 @@
-[gd_scene load_steps=8 format=3 uid="uid://ds6vydxhsks42"]
+[gd_scene load_steps=25 format=3 uid="uid://ds6vydxhsks42"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/PlayScene.gd" id="1_4fjf7"]
 [ext_resource type="Script" path="res://scenes/gameplay/StrumLine.gd" id="1_10u56"]
 [ext_resource type="PackedScene" uid="uid://bgmqmf2q67bxn" path="res://scenes/gameplay/Pause.tscn" id="3_58h6w"]
 [ext_resource type="Texture2D" uid="uid://30yqhd3qvoyc" path="res://assets/shared/images/healthBar.png" id="3_o0hmy"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_par68"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_md14v"]
 bg_color = Color(1, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgl5d"]
-bg_color = Color(0, 1, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mx335"]
+bg_color = Color(0.4, 1, 0.2, 1)
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4vlch"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0602o"]
 blend_mode = 3
+
+[sub_resource type="Gradient" id="Gradient_r6tpl"]
+colors = PackedColorArray(0.627451, 0.12549, 0.941176, 1, 0.627451, 0.12549, 0.941176, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7mw37"]
+gradient = SubResource("Gradient_r6tpl")
+width = 320
+
+[sub_resource type="Gradient" id="Gradient_xsn5m"]
+colors = PackedColorArray(0.545098, 0, 0.545098, 1, 0.545098, 0, 0.545098, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_66fqh"]
+gradient = SubResource("Gradient_xsn5m")
+width = 320
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3p1kp"]
+size = Vector2(320, 1)
+
+[sub_resource type="Gradient" id="Gradient_v3e8n"]
+colors = PackedColorArray(0, 1, 1, 1, 0, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8m1la"]
+gradient = SubResource("Gradient_v3e8n")
+width = 320
+
+[sub_resource type="Gradient" id="Gradient_b7c70"]
+colors = PackedColorArray(0, 0.545098, 0.545098, 1, 0, 0.545098, 0.545098, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_74ndx"]
+gradient = SubResource("Gradient_b7c70")
+width = 320
+
+[sub_resource type="Gradient" id="Gradient_atd7v"]
+colors = PackedColorArray(0, 1, 0, 1, 0, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_13ka0"]
+gradient = SubResource("Gradient_atd7v")
+width = 320
+
+[sub_resource type="Gradient" id="Gradient_308f2"]
+colors = PackedColorArray(0, 0.392157, 0, 1, 0, 0.392157, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_keqmk"]
+gradient = SubResource("Gradient_308f2")
+width = 320
+
+[sub_resource type="Gradient" id="Gradient_jw5bl"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_11spo"]
+gradient = SubResource("Gradient_jw5bl")
+width = 320
+
+[sub_resource type="Gradient" id="Gradient_revic"]
+colors = PackedColorArray(0.545098, 0, 0, 1, 0.545098, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ibj85"]
+gradient = SubResource("Gradient_revic")
+width = 320
 
 [node name="PlayScene" type="Node2D"]
 process_mode = 1
@@ -25,11 +84,12 @@ script = ExtResource("1_4fjf7")
 show_behind_parent = true
 layout_mode = 3
 anchors_preset = 0
-offset_left = 24.0
-offset_top = 32.0
-offset_right = 64.0
-offset_bottom = 72.0
+offset_left = 40.0
+offset_top = 24.0
+offset_right = 80.0
+offset_bottom = 64.0
 script = ExtResource("1_10u56")
+noteSkin = "pixel"
 voiceTrack = NodePath("../../VoicesOpponent")
 metadata/_edit_use_anchors_ = true
 
@@ -39,76 +99,18 @@ layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -512.0
-offset_top = 32.0
-offset_right = -472.0
-offset_bottom = 72.0
+offset_left = -540.0
+offset_top = 24.0
+offset_right = -500.0
+offset_bottom = 64.0
 grow_horizontal = 0
 script = ExtResource("1_10u56")
 cpu = false
 voiceTrack = NodePath("../../VoicesPlayer")
 metadata/_edit_use_anchors_ = true
 
-[node name="OpponentHealthBar" type="ProgressBar" parent="HUD"]
-offset_left = 100.0
-offset_top = 16.0
-offset_right = 460.0
-offset_bottom = 36.0
-theme_override_styles/background = SubResource("StyleBoxFlat_par68")
-theme_override_styles/fill = SubResource("StyleBoxFlat_sgl5d")
-max_value = 1.0
-value = 0.5
-show_percentage = false
-
-[node name="Overlay" type="TextureRect" parent="HUD/OpponentHealthBar"]
-material = SubResource("CanvasItemMaterial_4vlch")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_right = 2.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_o0hmy")
-expand_mode = 1
-
-[node name="PlayerHealthBar" type="ProgressBar" parent="HUD"]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -440.0
-offset_top = 16.0
-offset_right = -80.0
-offset_bottom = 36.0
-grow_horizontal = 0
-theme_override_styles/background = SubResource("StyleBoxFlat_par68")
-theme_override_styles/fill = SubResource("StyleBoxFlat_sgl5d")
-max_value = 1.0
-value = 0.5
-fill_mode = 1
-show_percentage = false
-
-[node name="Overlay" type="TextureRect" parent="HUD/PlayerHealthBar"]
-material = SubResource("CanvasItemMaterial_4vlch")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_right = 2.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_o0hmy")
-expand_mode = 1
-
-[node name="DebugInfo" type="Label" parent="HUD"]
-visible = false
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_font_sizes/font_size = 16
-
 [node name="Countdown" type="Label" parent="HUD"]
+visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -119,6 +121,7 @@ grow_vertical = 0
 text = "3"
 
 [node name="Countdown2" type="Label" parent="HUD"]
+visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -127,6 +130,80 @@ offset_right = 40.0
 offset_bottom = -17.0
 grow_vertical = 0
 text = "seconds"
+
+[node name="HealthBar" type="ProgressBar" parent="HUD"]
+z_index = 4096
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.5
+offset_top = -39.0
+offset_right = 300.5
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_md14v")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mx335")
+max_value = 1.0
+value = 0.5
+fill_mode = 1
+show_percentage = false
+
+[node name="Overlay" type="TextureRect" parent="HUD/HealthBar"]
+material = SubResource("CanvasItemMaterial_0602o")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_o0hmy")
+expand_mode = 1
+
+[node name="TouchControls" type="Node2D" parent="HUD"]
+visible = false
+
+[node name="LeftTouch" type="TouchScreenButton" parent="HUD/TouchControls"]
+modulate = Color(1, 1, 1, 0.1)
+z_index = 4096
+scale = Vector2(1, 720)
+texture_normal = SubResource("GradientTexture1D_7mw37")
+texture_pressed = SubResource("GradientTexture1D_66fqh")
+shape = SubResource("RectangleShape2D_3p1kp")
+action = "left"
+
+[node name="DownTouch" type="TouchScreenButton" parent="HUD/TouchControls"]
+modulate = Color(1, 1, 1, 0.1)
+z_index = 4096
+position = Vector2(320, 0)
+scale = Vector2(1, 720)
+texture_normal = SubResource("GradientTexture1D_8m1la")
+texture_pressed = SubResource("GradientTexture1D_74ndx")
+shape = SubResource("RectangleShape2D_3p1kp")
+action = "down"
+
+[node name="UpTouch" type="TouchScreenButton" parent="HUD/TouchControls"]
+modulate = Color(1, 1, 1, 0.1)
+z_index = 4096
+position = Vector2(640, 0)
+scale = Vector2(1, 720)
+texture_normal = SubResource("GradientTexture1D_13ka0")
+texture_pressed = SubResource("GradientTexture1D_keqmk")
+shape = SubResource("RectangleShape2D_3p1kp")
+action = "up"
+
+[node name="RightTouch" type="TouchScreenButton" parent="HUD/TouchControls"]
+modulate = Color(1, 1, 1, 0.1)
+z_index = 4096
+position = Vector2(960, 0)
+scale = Vector2(1, 720)
+texture_normal = SubResource("GradientTexture1D_11spo")
+texture_pressed = SubResource("GradientTexture1D_ibj85")
+shape = SubResource("RectangleShape2D_3p1kp")
+action = "right"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
