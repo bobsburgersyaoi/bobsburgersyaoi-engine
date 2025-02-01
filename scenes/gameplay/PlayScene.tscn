@@ -78,6 +78,8 @@ process_mode = 1
 physics_interpolation_mode = 1
 script = ExtResource("1_4fjf7")
 
+[node name="SongScripts" type="Node" parent="."]
+
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="StrumLineOpponent" type="Control" parent="HUD" node_paths=PackedStringArray("voiceTrack")]
@@ -85,11 +87,10 @@ show_behind_parent = true
 layout_mode = 3
 anchors_preset = 0
 offset_left = 40.0
-offset_top = 24.0
+offset_top = 36.0
 offset_right = 80.0
-offset_bottom = 64.0
+offset_bottom = 76.0
 script = ExtResource("1_10u56")
-noteSkin = "pixel"
 voiceTrack = NodePath("../../VoicesOpponent")
 metadata/_edit_use_anchors_ = true
 
@@ -100,14 +101,46 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -540.0
-offset_top = 24.0
+offset_top = 36.0
 offset_right = -500.0
-offset_bottom = 64.0
+offset_bottom = 76.0
 grow_horizontal = 0
 script = ExtResource("1_10u56")
 cpu = false
 voiceTrack = NodePath("../../VoicesPlayer")
 metadata/_edit_use_anchors_ = true
+
+[node name="HealthBar" type="ProgressBar" parent="HUD"]
+z_index = 4096
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.5
+offset_top = -55.0
+offset_right = 300.5
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_md14v")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mx335")
+max_value = 1.0
+value = 0.5
+fill_mode = 1
+show_percentage = false
+
+[node name="Overlay" type="TextureRect" parent="HUD/HealthBar"]
+material = SubResource("CanvasItemMaterial_0602o")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_o0hmy")
+expand_mode = 1
 
 [node name="Countdown" type="Label" parent="HUD"]
 visible = false
@@ -130,38 +163,6 @@ offset_right = 40.0
 offset_bottom = -17.0
 grow_vertical = 0
 text = "seconds"
-
-[node name="HealthBar" type="ProgressBar" parent="HUD"]
-z_index = 4096
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -300.5
-offset_top = -39.0
-offset_right = 300.5
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/background = SubResource("StyleBoxFlat_md14v")
-theme_override_styles/fill = SubResource("StyleBoxFlat_mx335")
-max_value = 1.0
-value = 0.5
-fill_mode = 1
-show_percentage = false
-
-[node name="Overlay" type="TextureRect" parent="HUD/HealthBar"]
-material = SubResource("CanvasItemMaterial_0602o")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_o0hmy")
-expand_mode = 1
 
 [node name="TouchControls" type="Node2D" parent="HUD"]
 visible = false

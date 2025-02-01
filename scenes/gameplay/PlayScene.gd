@@ -12,7 +12,7 @@ var time:float = 0.0
 # funny chart stuff
 var sName = ""
 static var difficulty = "hard"
-static var variation = ""
+static var variation = "pico"
 var variationString = ""
 static var playlist:Array[String] = []
 static var speed = 1.0
@@ -23,7 +23,7 @@ var generatedMusic = false
 var inCutscene = false
 var blueballed = false
 var cdProgress = 0
-var health = 0.5
+var health = 0.5 
 
 # TIME VARIABLES... ough
 var t:int = 0
@@ -31,7 +31,6 @@ var minutes:int = 0
 var seconds:int = 0
 
 func _ready():
-	#FunnyUtils.setGameSize(1024,960)
 	#updateTcSize()
 	Conductor.songPosition = -1000000
 	connect("b", onBeatHit)
@@ -43,6 +42,22 @@ func initializeSong():
 		variationString = "-"+variation
 	var chartData = JSON.parse_string(FileAccess.get_file_as_string("res://assets/songs/"+song+"/data/charts"+variationString+".json"))
 	metaData = JSON.parse_string(FileAccess.get_file_as_string("res://assets/songs/"+song+"/data/meta"+variationString+".json"))
+	var scriptsPath = "res://assets/songs/"
+	if DirAccess.dir_exists_absolute(scriptsPath):
+		for i in DirAccess.get_files_at(scriptsPath):
+			if i.ends_with(".gd"):
+				var scriptHolder = SongScript.new()
+				$SongScripts.add_child(scriptHolder)
+				scriptHolder.set_script(load(scriptsPath+i))
+				scriptHolder.name = i
+	scriptsPath = "res://assets/songs/"+song+"/scripts/"
+	if DirAccess.dir_exists_absolute(scriptsPath):
+		for i in DirAccess.get_files_at(scriptsPath):
+			if i.ends_with(".gd"):
+				var scriptHolder = SongScript.new()
+				$SongScripts.add_child(scriptHolder)
+				scriptHolder.set_script(load(scriptsPath+i))
+				scriptHolder.name = i
 	Conductor.changeBPM(metaData["bpm"])
 	sName = metaData["name"]
 	speed = chartData["scrollSpeed"][difficulty]
@@ -98,13 +113,24 @@ func initializeSong():
 		#if r > 5:
 			#j.noteType = "hurtNote"
 		#j.applyNoteType()
+	for i in $SongScripts.get_children():
+		if i.has_method("_ready"):
+			i._ready()
 	generatedMusic = true
 	earliestNoteCanBeHitAt = earliestNoteCanBeHitAt*1.5
 	Conductor.songPosition = Conductor.crochet*-4
 	$CountdownTimer.start(Conductor.crochet/1000)
 
+func _process(delta: float):
+	for i in $SongScripts.get_children():
+		if i.has_method("_process"):
+			i._process(delta)
+
 func _physics_process(delta: float):
 	super._physics_process(delta)
+	for i in $SongScripts.get_children():
+		if i.has_method("_physics_process"):
+			i._physics_process(delta)
 	$HUD/Countdown2.text = str($CountdownTimer.time_left)
 	if generatedMusic:
 		Conductor.songPosition += (Conductor.offset + delta * 1000)*$Inst.pitch_scale
@@ -167,24 +193,26 @@ func keyShit():
 							sn.frame = 0
 							sn.play(sn.confirm)
 							daNote.get_parent().get_parent().voiceTrack.volume_db = linear_to_db(1)
-							goodNoteHit(daNote)
+							playerNoteHit(daNote)
 						if Input.is_action_pressed(keys[idx]) && noteDistance > -2.5 && noteDistance < earliestNoteCanBeHitAt/4 && daNote.direction == idx && daNote.length > 0.0:
 							sn.frame = 0
 							sn.play(sn.confirm)
 							daNote.get_parent().get_parent().voiceTrack.volume_db = linear_to_db(1)
-							goodNoteHit(daNote)
+							playerNoteHit(daNote)
 						if !Input.is_action_pressed(keys[idx]) && noteDistance < 0 && daNote.direction == idx && daNote.length > 0.0:
 							noteMiss(daNote)
 
 func noteCheck(keyP:bool, note:Note):
 	if keyP:
-		goodNoteHit(note)
+		playerNoteHit(note)
 	else:
 		noteMiss(note)
 
-func goodNoteHit(note:Note):
+func playerNoteHit(note:Note):
+	for i in $SongScripts.get_children():
+		if i.has_method("playerNoteHit"):
+			i.playerNoteHit(note)
 	note.onNoteHit()
-	call("onPlayerNoteHit",note.direction, note.get_parent())
 	notes.erase(note)
 	note.queue_free()
 	health += 0.05
@@ -193,6 +221,9 @@ func goodNoteHit(note:Note):
 	$HUD/HealthBar.value = health
 
 func cpuNoteHit(note:Note):
+	for i in $SongScripts.get_children():
+		if i.has_method("cpuNoteHit"):
+			i.cpuNoteHit(note)
 	note.onNoteHit()
 	var dnP:StrumNote = note.get_parent()
 	notes.erase(note)
@@ -201,6 +232,9 @@ func cpuNoteHit(note:Note):
 	dnP.play(dnP.unpressed)
 
 func noteMiss(note:Note):
+	for i in $SongScripts.get_children():
+		if i.has_method("noteMiss"):
+			i.noteMiss(note)
 	note.get_parent().get_parent().voiceTrack.volume_db = linear_to_db(0.0001)
 	notes.erase(note)
 	note.queue_free()
@@ -212,19 +246,18 @@ func get_spawnpoint():
 	return 720*2 + ((720 / speed) + 122)
 
 func onBeatHit(beat:int = curBeat):
-	pass
+	for i in $SongScripts.get_children():
+		if i.has_method("onBeatHit"):
+			i.onBeatHit(curBeat)
 
 func onStepHit(step:int = curStep):
-	pass
+	for i in $SongScripts.get_children():
+		if i.has_method("onStepHit"):
+			i.onStepHit(curStep)
 
 func updateTcSize():
 	$HUD/TouchControls.scale.x = get_window().content_scale_size.x/1280.0
 	$HUD/TouchControls.scale.y = get_window().content_scale_size.y/720.0
-	print($HUD/TouchControls.scale)
-
-# funny script stuff
-func onPlayerNoteHit(direction:int, parent:StrumNote):
-	pass
 
 func _on_countdown_timer_timeout():
 	cdProgress += 1
